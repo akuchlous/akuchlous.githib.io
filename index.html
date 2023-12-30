@@ -1,22 +1,295 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Q&A Page</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="questions.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
 
-    <title>Hello, world!</title>
-  </head>
-  <body>
-    <h1>Hello, world!</h1>
+        #responseArea {
+            display: none; /* Hide by default */
+            background-color: #272822;
+            color: #f8f8f2;
+            border: 1px solid #75715e;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 700px; /* Increased maximum height for vertical scrolling */
+            margin-top: 20px; /* Added margin at the top */
+        }
+    </style>
+</head>
+<body>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Column with Sections and Subsections -->
+        <div class="col-md-4">
+            <h2 class="text-center mb-4">Chapters</h2>
+            <div id="sectionsAccordion">
+                <!-- JavaScript will populate this section -->
+            </div>
+        </div>
+
+        <!-- Right Column with Content and ChatGPT Interaction -->
+        <div class="col-md-8">
+            <div id="titleDescription">
+                <h2 id="pageTitle" class="text-center mb-4"></h2>
+                <p id="pageDescription" class="text-center"></p>
+            </div>
+
+            <!-- Landing Page Content -->
+            <div id="landingPageContent">
+                <h2 id="mainTitle" class="text-center mb-4"></h2>
+                <h4 id="subHeader" class="text-center mb-2"></h4>
+                <p id="landingPageText" class="text-center"></p>
+            </div>
+            
+            <div id="subsectionContent" style="display: none;">
+                <h2 id="subsectionTitle" class="text-center mb-4"></h2>
+                <p id="subsectionDescription" class="text-center"></p>
+                <div class="form-group">
+                    <label for="userInput">Your Answer:</label>
+                    <textarea id="userInput" class="form-control" rows="10" placeholder="Type your answer here"></textarea>
+                </div>
+                <div id="timerMessage" class="text-center mb-3"></div>
+                <button id="submitBtn" class="btn btn-primary btn-block mb-3">Submit</button>
+                <div id="ratingStars" class="text-center">
+                    <!-- JavaScript will populate the stars -->
+                </div>
+                <pre id="responseArea" class="text-center mt-3"></pre>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+		// Call the function to show initial landing page content
+		showLandingPageContent(
+		'System Design Interview Practice',
+		'Real World Questions',
+		'Elevate your understanding of distributed systems, scalability, and architecture through personalized practice sessions. ');
+    
+
+        var isButtonDisabled = false;
+        var timerDuration = 1 * 60; // 5 minutes in seconds
+        var timerInterval;
+
+        // Function to create the accordion based on the array
+        function createAccordion(sections) {
+            var sectionsAccordion = $('#sectionsAccordion');
+
+            sections.forEach(function (section, sectionIndex) {
+                var accordionItem = $('<div class="card section">');
+                var sectionId = 'section' + sectionIndex;
+
+                accordionItem.append('<div class="card-header" id="' + sectionId + '">' +
+                    '<h5 class="mb-0">' +
+                    '<button class="btn btn-link" data-toggle="collapse" data-target="#collapse' + sectionId + '" aria-expanded="true" aria-controls="collapse' + sectionId + '">' +
+                    section.title +
+                    '</button>' +
+                    '</h5>' +
+                    '</div>');
+
+                var collapseDiv = $('<div id="collapse' + sectionId + '" class="collapse" aria-labelledby="' + sectionId + '" data-parent="#sectionsAccordion">');
+                var cardBody = $('<div class="card-body">');
+
+
+                section.subsections.forEach(function (subsection, subsectionIndex) {
+                    cardBody.append('<a href="#" class="list-group-item list-group-item-action subsection" data-section-index="' + sectionIndex + '" data-subsection-index="' + subsectionIndex + '">' +
+                        '<strong>' + subsection.question + '</strong>' +
+                        // '<p>' + subsection.description + '</p>' +
+                        '</a>');
+                });
+
+                collapseDiv.append(cardBody);
+                accordionItem.append(collapseDiv);
+                sectionsAccordion.append(accordionItem);
+            });
+        }
+
+        // Call the function to create the accordion
+        createAccordion(qaData);
+
+        // Set default values for textarea and response area
+        $('#userInput').val('');
+        $('#ratingStars').html('');
+        $('#responseArea').html('');
+
+        // Event handler for clicking a section or subsection
+		$('#sectionsAccordion').on('click', '.list-group-item-action', function (event) {
+			
+		    event.preventDefault();
+		    var selectedSectionIndex = $(this).data('section-index');
+		    var selectedSubsectionIndex = $(this).data('subsection-index');
+		
+		    if ($(this).hasClass('section')) {
+		        // Show the landing page content
+		        alert();
+		        showLandingPageContent("a", "b", "c");
+		    } else if ($(this).hasClass('subsection')) {
+				hideInitialLandingPageContent();
+		        // Display subsection details and interaction in the right column
+		        var selectedSubsection = qaData[selectedSectionIndex].subsections[selectedSubsectionIndex];
+		        displaySubsectionContent(selectedSubsection);
+		        enableSubmitButton();
+		    }
+		});
+		function showLandingPageContent(title, subheader, landingText) {
+		    $('#mainTitle').text(title);
+		    $('#subHeader').text(subheader);
+		    $('#landingPageText').text(landingText);
+		    $('#landingPageContent').show();
+		    hideSubsectionContent(); // Hide subsection content when showing landing page
+		}
+		function hideInitialLandingPageContent() {
+		    $('#mainTitle').hide(); // Hide main title
+		    $('#subHeader').hide(); // Hide subheader
+		    $('#landingPageText').hide(); // Hide landing page text
+		}
+        // Event handler for the submit button
+        $('#submitBtn').on('click', function () {
+			if (!isButtonDisabled) {
+				disableSubmitButton();
+				startTimer();
+				var userAnswer = $('#userInput').val();
+
+				// For simplicity, assuming the first section and subsection are selected
+				var selectedSectionIndex = 0;
+				var selectedSubsectionIndex = 0;
+
+				// Simulate interaction with ChatGPT
+				var sectionTitle = qaData[selectedSectionIndex].title;
+				var sectionDescription = qaData[selectedSectionIndex].description;
+				var subsection = qaData[selectedSectionIndex].subsections[selectedSubsectionIndex];
+				var response = getChatGPTResponse(sectionTitle, sectionDescription, subsection.question, subsection.question_details, subsection.grading, userAnswer);
+
+				// Display the response, rating stars, and disable the button				
+				displayChatGPTResponse(response);
+				$('#responseArea').show(); 
+			}
+		});
+            
+        // Function to display section details in the right column
+        function displaySectionDetails(section) {
+            $('#pageTitle').text(section.title);
+            $('#pageDescription').text(section.description);
+            showTitleDescription();
+        }
+
+        // Function to display subsection details in the right column
+        function displaySubsectionContent(subsection) {
+            $('#subsectionTitle').text(subsection.question);
+            $('#subsectionDescription').text(subsection.question_details);
+            showSubsectionContent();
+        }
+
+        
+        function displayChatGPTResponse(response) {
+		    // printTextOverTelnet(response.text, '#responseArea');
+		    printTextOverTelnet(response.text, '#responseArea');
+		}
+		
+		// Function to print text as if coming over telnet with a delay
+		function printTextOverTelnet(text, targetElement) {
+		    var element = $(targetElement);
+		    element.html(''); // Clear existing content
+		    var index = 0;
+		
+		    function printNextCharacter() {
+		        if (index < text.length) {
+		            element.append(text.charAt(index));
+		            index++;
+		            setTimeout(printNextCharacter, 10); // Adjust the delay as needed
+		        }
+		    }
+		
+		    printNextCharacter();
+		}
+
+
+        // Function to show the title and description in the right column
+        function showTitleDescription() {
+            $('#titleDescription').show();
+            $('#subsectionContent').hide();
+        }
+
+        // Function to show subsection content in the right column
+        function showSubsectionContent() {
+            $('#titleDescription').hide();
+            $('#subsectionContent').show();
+        }
+
+        // Function to hide subsection content in the right column
+        function hideSubsectionContent() {
+            $('#subsectionContent').hide();
+        }
+        
+        function showGradingMessage() {
+		    
+		}
+
+
+        // Function to disable the submit button
+        function disableSubmitButton() {
+            isButtonDisabled = true;
+            $('#submitBtn').prop('disabled', true);
+
+        }
+
+        // Function to enable the submit button
+        function enableSubmitButton() {
+            isButtonDisabled = false;
+            $('#submitBtn').prop('disabled', false);
+        }
+
+        // Function to start the timer
+        function startTimer() {
+			var timerMessage = $('#timerMessage');
+			var secondsRemaining = timerDuration;
+
+			function updateTimerMessage() {
+				var minutes = Math.floor(secondsRemaining / 60);
+				var seconds = secondsRemaining % 60;
+				timerMessage.text('Please wait for next ' + minutes + ' minutes and ' + seconds + ' seconds.');
+			}
+
+			updateTimerMessage();
+
+			timerInterval = setInterval(function () {
+				if (secondsRemaining > 0) {
+					secondsRemaining--;
+					updateTimerMessage();
+				} else {
+					clearInterval(timerInterval);
+					enableSubmitButton();
+					timerMessage.text(''); // Clear the timer message
+				}
+			}, 1000);
+		}
+
+
+		// Simulate interaction with ChatGPT and return a response object
+		function getChatGPTResponse(sectionTitle, sectionDescription, subsectionTitle, subsectionDescription, grading, userAnswer) {
+		    var response = {};
+		    response.text = "This is stub to fill in after the call is made";
+		    return response;
+		}
+    });
+</script>
+
+</body>
 </html>

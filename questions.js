@@ -1,5 +1,4 @@
 var qaData =
-
 [
   {
     "label": "System Design",

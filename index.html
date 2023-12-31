@@ -283,53 +283,8 @@
 
 		// Simulate interaction with ChatGPT and return a response object
 		function getChatGPTResponse(sectionTitle, sectionDescription, subsectionTitle, subsectionDescription, grading, userAnswer) {
-		    // Replace 'YOUR_API_KEY' with your actual OpenAI API key
-		    var apiUrl = 'http://localhost:8080';
-		    var apiUrl = 'https://us-central1-l5l6l7.cloudfunctions.net/analyze-answer-1';
-		    var apiUrl = 'https://analyze-answer-1-befae4wf5a-uc.a.run.app';
-		    // var apiUrl = 'https://api.openai.com/v1/chat/completions';
-            	var apiKey = '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';
-          
+		    var response = { "text":"value"   };
 		
-		    var conversation = [
-		        { role: 'system', content: "You are System Design Interviewer" },
-		        { role: 'user', content: "Design is: " + sectionDescription },
-		        { role: 'user', content: "Design sub question is: " +subsectionTitle },
-		        { role: 'user', content: "Design Sub question answer requirement is: " +subsectionDescription },
-		        { role: 'user', content: "Candidate answer is: " + userAnswer },
-		        { role: 'user', content: "Candidtate answer should cover the following topics: " + grading },
-		        { role: 'user', content: "Analyze the reponse. Give three seperate sections. one on what is good, second on what needs to be improved and third Write a good answer in 100 words."},
-		        { role: 'user', content: "reply should be in bullet points formatted as per html"},
-		        { role: 'user', content: "Finally, provide a single line score based on grading based on topics and accuracy" }
-		    ];
-		
-		    var response = {};
-		
-		    // Make an API request using jQuery
-		    $.ajax({
-		        url: apiUrl,
-		        type: 'POST',
-		        headers: {
-		        	'content-type': 'application/json; charset=utf-8',
-		            'Authorization': `Bearer ${apiKey}`
-		        },
-			async:false,
-		        data: JSON.stringify({
-		            model: 'gpt-3.5-turbo', // Replace with the model of your choice
-		            messages: conversation,
-		        }),
-		        success: function (data) {
-		            response.text = data.choices[0].message.content;
-		            response.rating = Math.floor(Math.random() * 10) + 1; // Replace with actual rating from user feedback
-		        },
-		        error: function (error) {
-		            console.error('Error:', error);
-		            response.text = 'Error occurred while fetching response from ChatGPT.';
-		            response.rating = 0; // Set a default rating in case of an error
-		        }
-		    });
-		
-		    return response;
 		}
     });
 </script>

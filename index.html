@@ -42,7 +42,6 @@
             </div>
         </div>
 
-        <!-- Right Column with Content and ChatGPT Interaction -->
         <div class="col-md-8">
             <div id="titleDescription">
                 <h2 id="pageTitle" class="text-center mb-4"></h2>
@@ -171,11 +170,10 @@
 				var selectedSectionIndex = 0;
 				var selectedSubsectionIndex = 0;
 
-				// Simulate interaction with ChatGPT
 				var sectionTitle = qaData[selectedSectionIndex].title;
 				var sectionDescription = qaData[selectedSectionIndex].description;
 				var subsection = qaData[selectedSectionIndex].subsections[selectedSubsectionIndex];
-				var response = getChatGPTResponse(sectionTitle, sectionDescription, subsection.question, subsection.question_details, subsection.grading, userAnswer);
+				var response = getChatResponse(sectionTitle, sectionDescription, subsection.question, subsection.question_details, subsection.grading, userAnswer);
 
 				// Display the response, rating stars, and disable the button				
 				displayChatGPTResponse(response);
@@ -282,9 +280,10 @@
 
 
 		// Simulate interaction with ChatGPT and return a response object
-		function getChatGPTResponse(sectionTitle, sectionDescription, subsectionTitle, subsectionDescription, grading, userAnswer) {
-		    var response = { "text":"value"   };
-		
+		function getChatResponse(sectionTitle, sectionDescription, subsectionTitle, subsectionDescription, grading, userAnswer) {
+		    var response = {};
+		    response.text = " This is a dummy reponse";
+		    return response;
 		}
     });
 </script>

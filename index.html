@@ -277,8 +277,7 @@
 
 
 		function getChatResponse(uuid, userAnswer) {
-		    // var apiUrl = "https://analyze-answer-1-befae4wf5a-uc.a.run.app"
-		    var apiUrl = "http://localhost:8080"
+		    var apiUrl = "https://analyze-answer-1-befae4wf5a-uc.a.run.app"
 		
 		    var response = {};
 		    $.ajax({
@@ -297,7 +296,7 @@
 			    $('#responseArea').show(); 
 		        },
 		        error: function (error) {
-		            text = 'Error occurred while fetching response from ChatGPT.';
+		            text = 'Error occurred while fetching response from our resident interviewer.';
 			    displayChatResponse(text);
 			    $('#responseArea').show(); 
 		        }

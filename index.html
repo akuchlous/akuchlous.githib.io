@@ -173,10 +173,10 @@
 				var sectionTitle = qaData[selectedSectionIndex].title;
 				var sectionDescription = qaData[selectedSectionIndex].description;
 				var subsection = qaData[selectedSectionIndex].subsections[selectedSubsectionIndex];
-				var response = getChatResponse(sectionTitle, sectionDescription, subsection.question, subsection.question_details, subsection.grading, userAnswer);
+				var response = getChatResponse(subsection.uuid, userAnswer);
 
 				// Display the response, rating stars, and disable the button				
-				displayChatGPTResponse(response);
+				displayChatResponse(response);
 				$('#responseArea').show(); 
 			}
 		});
@@ -196,7 +196,7 @@
         }
 
         
-        function displayChatGPTResponse(response) {
+        function displayChatResponse(response) {
 		    printTextOverTelnet(response.text, '#responseArea');
 		}
 		
@@ -273,16 +273,42 @@
 				} else {
 					clearInterval(timerInterval);
 					enableSubmitButton();
-					timerMessage.text(''); // Clear the timer message
+					timerMessage.text(''); 
 				}
 			}, 1000);
 		}
 
 
-		// Simulate interaction with ChatGPT and return a response object
-		function getChatResponse(sectionTitle, sectionDescription, subsectionTitle, subsectionDescription, grading, userAnswer) {
+		function getChatResponse(uuid, userAnswer) {
+		    // var response = {};
+		    // response.text = " This is a dummy reponse";
+		    // return response;
+		    
+		    var apiUrl = "https://analyze-answer-1-befae4wf5a-uc.a.run.app"
+		
 		    var response = {};
-		    response.text = " This is a dummy reponse";
+		    $.ajax({
+		        url: apiUrl,
+		        type: 'POST',
+		        headers: {
+		        	'content-type': 'application/json; charset=utf-8',
+		        },
+			async:false,
+		        data: JSON.stringify({
+		            "uuid": uuid,
+		             answer: userAnswer
+		        }),
+		        success: function (data) {
+		            response.text = data.text	;
+		            response.rating = Math.floor(Math.random() * 10) + 1; // Replace with actual rating from user feedback
+		        },
+		        error: function (error) {
+		            console.error('Error:', error);
+		            response.text = 'Error occurred while fetching response from ChatGPT.';
+		            response.rating = 0; // Set a default rating in case of an error
+		        }
+		    });
+		
 		    return response;
 		}
     });

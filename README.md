@@ -1,1 +1,0 @@
-# akuchlous.githib.io

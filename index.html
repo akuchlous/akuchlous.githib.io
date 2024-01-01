@@ -173,11 +173,8 @@
 				var sectionTitle = qaData[selectedSectionIndex].title;
 				var sectionDescription = qaData[selectedSectionIndex].description;
 				var subsection = qaData[selectedSectionIndex].subsections[selectedSubsectionIndex];
-				var response = getChatResponse(subsection.uuid, userAnswer);
+				getChatResponse(subsection.uuid, userAnswer);
 
-				// Display the response, rating stars, and disable the button				
-				displayChatResponse(response);
-				$('#responseArea').show(); 
 			}
 		});
             
@@ -197,7 +194,7 @@
 
         
         function displayChatResponse(response) {
-		    printTextOverTelnet(response.text, '#responseArea');
+		    printTextOverTelnet(response, '#responseArea');
 		}
 		
 		// Function to print text as if coming over telnet with a delay
@@ -280,11 +277,8 @@
 
 
 		function getChatResponse(uuid, userAnswer) {
-		    // var response = {};
-		    // response.text = " This is a dummy reponse";
-		    // return response;
-		    
-		    var apiUrl = "https://analyze-answer-1-befae4wf5a-uc.a.run.app"
+		    // var apiUrl = "https://analyze-answer-1-befae4wf5a-uc.a.run.app"
+		    var apiUrl = "http://localhost:8080"
 		
 		    var response = {};
 		    $.ajax({
@@ -293,23 +287,21 @@
 		        headers: {
 		        	'content-type': 'application/json; charset=utf-8',
 		        },
-			async:false,
+		        processData: false,
 		        data: JSON.stringify({
 		            "uuid": uuid,
 		             answer: userAnswer
 		        }),
 		        success: function (data) {
-		            response.text = data.text	;
-		            response.rating = Math.floor(Math.random() * 10) + 1; // Replace with actual rating from user feedback
+			    displayChatResponse(data.text);
+			    $('#responseArea').show(); 
 		        },
 		        error: function (error) {
-		            console.error('Error:', error);
-		            response.text = 'Error occurred while fetching response from ChatGPT.';
-		            response.rating = 0; // Set a default rating in case of an error
+		            text = 'Error occurred while fetching response from ChatGPT.';
+			    displayChatResponse(text);
+			    $('#responseArea').show(); 
 		        }
 		    });
-		
-		    return response;
 		}
     });
 </script>

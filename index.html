@@ -223,7 +223,7 @@
                     
                     <div class="form-group">
                         <label for="userInput">Your Answer</label>
-                        <textarea id="userInput" class="form-control" rows="10" placeholder="Example answer." onpaste="return false;">Binary search is a search algorithm that works by repeatedly dividing the search space in half. It compares the target value with the middle element of the array and narrows down the search space accordingly. This process continues until the target value is found or the search space is empty. The time complexity of binary search is O(log n), where n is the size of the array.</textarea>
+                        <textarea id="userInput" class="form-control" rows="10" placeholder="Example answer. The time complexity of binary search is O(log n), where n is the size of the array." onpaste="return false;">Binary search is a search algorithm that works by repeatedly dividing the search space in half. It compares the target value with the middle element of the array and narrows down the search space accordingly. This process continues until the target value is found or the search space is empty. The time complexity of binary search is O(log n), where n is the size of the array.</textarea>
                     </div>
                     <!--
                     <div class="form-group">
@@ -244,10 +244,10 @@
                     <img src="https://raw.githubusercontent.com/akuchlous/akuchlous.github.io/main/qr.png" alt="QR">
                 </div>
                 
-                <li class="list-group-item"><a href="leetcode_51_100/index.html">leetcode_51_100</a>
-                </li>
-                
                 <li class="list-group-item"><a href="leetcode_1_50/index.html">leetcode_1_50</a>
+                </li>
+                <li class="list-group-item"><a href="leetcode_51_100/index.html">leetcode_51_100</a>
+                
                 </li>
                 
             </div>
@@ -298,13 +298,14 @@
             }
             function PleaseWaitSubmitButtonText() {
                 $('#submitBtn').text('Please Wait');
+                $('#submitBtn').attr('disabled', true);
             }
             function ResultSubmitButtonText() {
                 $('#submitBtn').text('Response Below');
             }
 
             // AJAX call
-            function getChatResponse(userAnswer, secretCode) {
+            function getChatResponse(uuid, userAnswer, secretCode) {
                 // var apiURL = "http://localhost:8080";
                 var apiURL = "https://us-central1-l5l6l7.cloudfunctions.net/analyze-answer-1";
                 PleaseWaitSubmitButtonText();

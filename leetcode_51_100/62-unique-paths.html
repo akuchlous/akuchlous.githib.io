@@ -295,13 +295,14 @@ How many unique paths are there to reach the bottom-right corner of the grid?</p
             }
             function PleaseWaitSubmitButtonText() {
                 $('#submitBtn').text('Please Wait');
+                $('#submitBtn').attr('disabled', true);
             }
             function ResultSubmitButtonText() {
                 $('#submitBtn').text('Response Below');
             }
 
             // AJAX call
-            function getChatResponse(userAnswer, secretCode) {
+            function getChatResponse(uuid, userAnswer, secretCode) {
                 // var apiURL = "http://localhost:8080";
                 var apiURL = "https://us-central1-l5l6l7.cloudfunctions.net/analyze-answer-1";
                 PleaseWaitSubmitButtonText();

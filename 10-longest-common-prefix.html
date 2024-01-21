@@ -233,7 +233,6 @@
                     </div>
                     -->
                     <p id="wordCount" class="mt-2">Word Count: 0</p>
-                    <input type="hidden" id="uuid" value="10-longest-common-prefix">
                     <button id="submitBtn" class="btn btn-primary btn-block mb-3">Submit</button>
 
                     <div id="responseArea" class="text-center mt-3"></div>
@@ -249,47 +248,36 @@
                 <li class="list-group-item"><a href="leetcode_51_100/index.html">leetcode_51_100</a>
                 </li>
                 
+                <li class="list-group-item"><a href="leetcode_1_50/index.html">leetcode_1_50</a>
+                </li>
+                
             </div>
         </div>
     </div>
 
     <script>
-        function displayQuestionDetails(title, description) {
-            $('#selectedQuestionTitle').text(title);
-            $('#selectedQuestionDescription').text(description);
-        }
-
         $(document).ready(function () {
-            
-            $('#userInput').on('input', function () {
-                updateWordCount();
+            $('#userInput').keyup(function () {
+                var words = $.trim(this.value).length ? this.value.match(/\S+/g).length : 0;
+                $('#wordCount').text('Word Count: ' + words);
             });
 
-            function disableSubmitButton() {
-                $('#submitBtn').prop('disabled', true);
-                $('#submitBtn').text("Please Wait");
-            }
-
-            function enableSubmitButton() {
-                $('#submitBtn').prop('disabled', false);
-            }
-
-            function updateWordCount() {
-                var minWordCount = 10;
+            $('#submitBtn').click(function () {
                 var userInput = $('#userInput').val();
-                var wordCount = userInput.split(/\s+/).filter(function (word) { return word.length > 0; }).length;
+		var uuid = "10-longest-common-prefix";
+                // var codeInput = $('#codeInput').val();
+                var codeInput = "empty";
 
-                $('#wordCount').text('Word Count: ' + wordCount);
-
-                if (wordCount >= minWordCount) {
-                    enableSubmitButton();
-                } else {
-                    disableSubmitButton();
+                if (userInput.length < 2) {
+                    alert('Please enter at least 25 words.');
+                    return;
                 }
-            }
-
+                getChatResponse(uuid, userInput, codeInput);
+                
+            });
+            
             function displayChatResponse(response) {
-
+                ResultSubmitButtonText();
                 printTextOverTelnet(response, '#responseArea');
                 $('#responseArea').show();
             }
@@ -309,9 +297,19 @@
 
                 printNextCharacter();
             }
+            function PleaseWaitSubmitButtonText() {
+                $('#submitBtn').text('Please Wait');
+            }
+            function ResultSubmitButtonText() {
+                $('#submitBtn').text('Response Below');
+            }
 
-            function getChatResponse(uuid, userAnswer, secretCode) {
-                var apiURL = "https://localhost:8080";
+            // AJAX call
+            function getChatResponse(userAnswer, secretCode) {
+                // var apiURL = "http://localhost:8080";
+                var apiURL = "https://us-central1-l5l6l7.cloudfunctions.net/analyze-answer-1";
+                PleaseWaitSubmitButtonText();
+
 
                 var response = {};
                 $.ajax({
@@ -326,25 +324,16 @@
                     }),
                     success: function (data) {
                         displayChatResponse(data.text);
-
                     },
                     error: function (error) {
                         text = 'Error occurred while fetching response from our resident interviewer.';
                         displayChatResponse(text);
                     }
                 });
-            }
 
-            $('#submitBtn').on('click', function () {
-                var uuid = $('#uuid').val();
-                var userResponse = $('#userInput').val();
-                // var secretCode = $('#codeInput').val();
-                var secretCode = "";
-                getChatResponse(uuid, userResponse, secretCode);
-            });
+            }
         });
     </script>
-
 </body>
 
 </html>

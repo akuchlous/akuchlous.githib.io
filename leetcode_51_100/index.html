@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubjectDojo : Learning Platform With AI</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <style>
+        #banner {
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        #questionList,
+        #tagsColumn {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #questionList li,
+        #tagsColumn li {
+            margin-bottom: 10px;
+        }
+
+        #tagsColumn {
+            width: 15%;
+            border-left: 1px solid lightgray;
+            padding-left: 20px;
+            margin-top: 20px;
+        }
+
+        #tagsColumn h2 {
+            text-align: center;
+        }
+
+        .tag {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #userInput,
+        #codeInput {
+            margin-bottom: 10px;
+        }
+
+        #questionDetails {
+            margin-bottom: 20px;
+        }
+
+        #responseArea {
+            display: none;
+            background-color: #272822;
+            color: #f8f8f2;
+            border: 1px solid #75715e;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 200px;
+            margin-top: 20px;
+        }
+
+        #qrcode {
+            margin-top: 10px;
+            text-align: center;
+            border: 2px solid #000;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        #qrcode img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #breadcrumbs {
+            margin-bottom: 20px;
+        }
+
+        #breadcrumbs ol {
+            background-color: #f8f9fa;
+            padding: 10px;
+            list-style: none;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        #breadcrumbs li {
+            margin-right: 10px;
+        }
+
+        #breadcrumbs li::after {
+            content: '/';
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="banner" class="navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">
+            <h3>Subject Dojo : Learning Platform with AI</h3>
+        </a>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <h2 class="text-center mb-4"><a href="index.html">Topic</a></h2>
+                <ul class="list-group" id="questionList">
+                    
+                    <li class="list-group-item"><a href="51-n-queens.html">51 n queens</a></li>
+                    
+                    <li class="list-group-item"><a href="52-n-queens-ii.html">52 n queens ii</a></li>
+                    
+                    <li class="list-group-item"><a href="53-maximum-subarray.html">53 maximum subarray</a></li>
+                    
+                    <li class="list-group-item"><a href="54-spiral-matrix.html">54 spiral matrix</a></li>
+                    
+                    <li class="list-group-item"><a href="55-jump-game.html">55 jump game</a></li>
+                    
+                    <li class="list-group-item"><a href="56-merge-intervals.html">56 merge intervals</a></li>
+                    
+                    <li class="list-group-item"><a href="57-insert-interval.html">57 insert interval</a></li>
+                    
+                    <li class="list-group-item"><a href="58-length-of-last-word.html">58 length of last word</a></li>
+                    
+                    <li class="list-group-item"><a href="59-spiral-matrix-ii.html">59 spiral matrix ii</a></li>
+                    
+                    <li class="list-group-item"><a href="60-permutation-sequence.html">60 permutation sequence</a></li>
+                    
+                    <li class="list-group-item"><a href="61-rotate-list.html">61 rotate list</a></li>
+                    
+                    <li class="list-group-item"><a href="62-unique-paths.html">62 unique paths</a></li>
+                    
+                    <li class="list-group-item"><a href="63-unique-paths-ii.html">63 unique paths ii</a></li>
+                    
+                    <li class="list-group-item"><a href="64-minimum-path-sum.html">64 minimum path sum</a></li>
+                    
+                    <li class="list-group-item"><a href="65-valid-number.html">65 valid number</a></li>
+                    
+                    <li class="list-group-item"><a href="66-plus-one.html">66 plus one</a></li>
+                    
+                    <li class="list-group-item"><a href="67-add-binary.html">67 add binary</a></li>
+                    
+                    <li class="list-group-item"><a href="68-text-justification.html">68 text justification</a></li>
+                    
+                    <li class="list-group-item"><a href="69-sqrtx.html">69 sqrtx</a></li>
+                    
+                    <li class="list-group-item"><a href="70-climbing-stairs.html">70 climbing stairs</a></li>
+                    
+                    <li class="list-group-item"><a href="71-simplify-path.html">71 simplify path</a></li>
+                    
+                    <li class="list-group-item"><a href="72-edit-distance.html">72 edit distance</a></li>
+                    
+                    <li class="list-group-item"><a href="73-set-matrix-zeroes.html">73 set matrix zeroes</a></li>
+                    
+                    <li class="list-group-item"><a href="74-search-a-2d-matrix.html">74 search a 2d matrix</a></li>
+                    
+                    <li class="list-group-item"><a href="75-sort-colors.html">75 sort colors</a></li>
+                    
+                    <li class="list-group-item"><a href="76-minimum-window-substring.html">76 minimum window substring</a></li>
+                    
+                    <li class="list-group-item"><a href="77-combinations.html">77 combinations</a></li>
+                    
+                    <li class="list-group-item"><a href="78-subsets.html">78 subsets</a></li>
+                    
+                    <li class="list-group-item"><a href="79-word-search.html">79 word search</a></li>
+                    
+                    <li class="list-group-item"><a href="80-remove-duplicates-from-sorted-array-ii.html">80 remove duplicates from sorted array ii</a></li>
+                    
+                    <li class="list-group-item"><a href="81-search-in-rotated-sorted-array-ii.html">81 search in rotated sorted array ii</a></li>
+                    
+                    <li class="list-group-item"><a href="82-remove-duplicates-from-sorted-list-ii.html">82 remove duplicates from sorted list ii</a></li>
+                    
+                    <li class="list-group-item"><a href="83-remove-duplicates-from-sorted-list.html">83 remove duplicates from sorted list</a></li>
+                    
+                    <li class="list-group-item"><a href="84-largest-rectangle-in-histogram.html">84 largest rectangle in histogram</a></li>
+                    
+                    <li class="list-group-item"><a href="85-maximal-rectangle.html">85 maximal rectangle</a></li>
+                    
+                    <li class="list-group-item"><a href="86-partition-list.html">86 partition list</a></li>
+                    
+                    <li class="list-group-item"><a href="87-scramble-string.html">87 scramble string</a></li>
+                    
+                    <li class="list-group-item"><a href="88-merge-sorted-array.html">88 merge sorted array</a></li>
+                    
+                    <li class="list-group-item"><a href="89-gray-code.html">89 gray code</a></li>
+                    
+                    <li class="list-group-item"><a href="90-subsets-ii.html">90 subsets ii</a></li>
+                    
+                    <li class="list-group-item"><a href="91-decode-ways.html">91 decode ways</a></li>
+                    
+                    <li class="list-group-item"><a href="92-reverse-linked-list-ii.html">92 reverse linked list ii</a></li>
+                    
+                    <li class="list-group-item"><a href="93-restore-ip-addresses.html">93 restore ip addresses</a></li>
+                    
+                    <li class="list-group-item"><a href="94-binary-tree-inorder-traversal.html">94 binary tree inorder traversal</a></li>
+                    
+                    <li class="list-group-item"><a href="95-unique-binary-search-trees-ii.html">95 unique binary search trees ii</a></li>
+                    
+                    <li class="list-group-item"><a href="96-unique-binary-search-trees.html">96 unique binary search trees</a></li>
+                    
+                    <li class="list-group-item"><a href="97-interleaving-string.html">97 interleaving string</a></li>
+                    
+                    <li class="list-group-item"><a href="98-validate-binary-search-tree.html">98 validate binary search tree</a></li>
+                    
+                    <li class="list-group-item"><a href="99-recover-binary-search-tree.html">99 recover binary search tree</a></li>
+                    
+                    <li class="list-group-item"><a href="100-same-tree.html">100 same tree</a></li>
+                    
+                </ul>
+            </div>
+
+            <div class="col-md-6">
+                <div id="questionDetails">
+                    <h2 id="selectedQuestionTitle" class="text-center mb-4">51. N-Queens</h2>
+                    <p id="selectedQuestionDescription" class="text-center">The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other. Given an integer n, return all distinct solutions to the n-queens puzzle. Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space, respectively.</p>
+                    
+                    <div class="form-group">
+                        <label for="userInput">Your Answer</label>
+                        <textarea id="userInput" class="form-control" rows="10" placeholder="Answer in 3-4 sentences and minimum words of 50."
+                            onpaste="return false;"></textarea>
+                    </div>
+                    <!--
+                    <div class="form-group">
+                        <label for="codeInput">Please Be Human</label>
+                        <input type="text" id="codeInput" class="form-control" placeholder="Get secret from QR code." />
+                    </div>
+                    -->
+                    <p id="wordCount" class="mt-2">Word Count: 0</p>
+                    <button id="submitBtn" class="btn btn-primary btn-block mb-3">Submit</button>
+
+                    <div id="responseArea" class="text-center mt-3"></div>
+                    
+                </div>
+            </div>
+
+            <div id="tagsColumn" class="col-md-2">
+                <div id="qrcode">
+                    <img src="https://raw.githubusercontent.com/akuchlous/akuchlous.github.io/main/qr.png" alt="QR">
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#userInput').keyup(function () {
+                var words = $.trim(this.value).length ? this.value.match(/\S+/g).length : 0;
+                $('#wordCount').text('Word Count: ' + words);
+            });
+
+            $('#submitBtn').click(function () {
+                var userInput = $('#userInput').val();
+		var uuid = "leetcode_51_100/index";
+                // var codeInput = $('#codeInput').val();
+                var codeInput = "empty";
+
+                if (userInput.length < 2) {
+                    alert('Please enter at least 25 words.');
+                    return;
+                }
+                getChatResponse(uuid, userInput, codeInput);
+                
+            });
+            
+            function displayChatResponse(response) {
+                ResultSubmitButtonText();
+                printTextOverTelnet(response, '#responseArea');
+                $('#responseArea').show();
+            }
+
+            function printTextOverTelnet(text, targetElement) {
+                var element = $(targetElement);
+                element.html('');
+                var index = 0;
+
+                function printNextCharacter() {
+                    if (index < text.length) {
+                        element.append(text.charAt(index));
+                        index++;
+                        setTimeout(printNextCharacter, 10);
+                    }
+                }
+
+                printNextCharacter();
+            }
+            function PleaseWaitSubmitButtonText() {
+                $('#submitBtn').text('Please Wait');
+            }
+            function ResultSubmitButtonText() {
+                $('#submitBtn').text('Response Below');
+            }
+
+            // AJAX call
+            function getChatResponse(userAnswer, secretCode) {
+                // var apiURL = "http://localhost:8080";
+                var apiURL = "https://us-central1-l5l6l7.cloudfunctions.net/analyze-answer-1";
+                PleaseWaitSubmitButtonText();
+
+
+                var response = {};
+                $.ajax({
+                    url: apiURL,
+                    type: 'POST',
+                    headers: { 'content-type': 'application/json; charset=utf-8' },
+                    processData: false,
+                    data: JSON.stringify({
+                        "uuid": uuid,
+                        "answer": userAnswer,
+                        "secretCode": secretCode
+                    }),
+                    success: function (data) {
+                        displayChatResponse(data.text);
+                    },
+                    error: function (error) {
+                        text = 'Error occurred while fetching response from our resident interviewer.';
+                        displayChatResponse(text);
+                    }
+                });
+
+            }
+        });
+    </script>
+</body>
+
+</html>
